@@ -1,8 +1,10 @@
 # ActionCrud
 
-ActionCrud speeds up development by making your controllers inherit all restful actions so you just have to focus on what is important. It makes your controllers more powerful and cleaner at the same time.
+ActionCrud speeds up development by making your controllers inherit all restful actions so you just have to focus on what is important. It makes your controllers more powerful and cleaner at the same time. In addition to making your controllers follow a pattern, it helps you to write better code by following fat models and skinny controllers convention.
 
-In addition to making your controllers follow a pattern, it helps you to write better code by following fat models and skinny controllers convention.
+[![Gem Version](https://badge.fury.io/rb/action_crud.svg)](https://badge.fury.io/rb/action_crud)
+[![Build Status](https://travis-ci.org/hardpixel/action-crud.svg?branch=master)](https://travis-ci.org/hardpixel/action-crud)
+[![Code Climate](https://codeclimate.com/github/hardpixel/action-crud/badges/gpa.png)](https://codeclimate.com/github/hardpixel/aaction-crud)
 
 ## Installation
 
@@ -73,11 +75,11 @@ class Post < ActionController::Base
 end
 ```
 
-After setting up the controller, like the examples above, you will have a fully working CRUD controller with instance variables `@post` and `@posts` available.
+After setting up the controller, like the examples above, you will have a fully working CRUD controller with instance variables `@post` and `@posts` available. Also, if you use a pagination gem like (SmartPagination)[https://github.com/hardpixel/smart-pagination], the index records will be automagically paginated!
 
 ActionCrud also injects in your views and controllers the following helpers:
 
-| Paths              | URLs             | Data               | Tags (view only)  |
+| Paths              | URLs             | Data               | Tags (views only) |
 | :----------------- | :--------------- | :----------------- | :---------------- |
 | `records_path`     | `records_url`    | `current_model`    | `record_link_to`  |
 | `record_path`      | `record_url`     | `current_record`   | `record_links_to` |
