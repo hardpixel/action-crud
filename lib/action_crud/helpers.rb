@@ -21,7 +21,7 @@ module ActionCrud
     end
 
     # Get records index path
-    def index_record_path(*args)
+    def records_path(*args)
       options = args.extract_options!
       record  = args.first
 
@@ -29,7 +29,7 @@ module ActionCrud
     end
 
     # Get records index absolute url
-    def index_record_url(*args)
+    def records_url(*args)
       options = args.extract_options!
       record  = args.first
 
