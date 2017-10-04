@@ -24,17 +24,7 @@ module ActionCrud
 
       # Get pagination params
       def pagination_params
-        params.permit(:page, :per_page).to_h
-      end
-
-      # Get pagination page
-      def page
-        pagination_params[:page]
-      end
-
-      # Get pagination per page
-      def per_page
-        pagination_params[:per_page] || super
+        @pagination_params ||= params.permit(:page, :per_page).to_h.deep_symbolize_keys
       end
 
       # Set pagination parameters
@@ -46,7 +36,7 @@ module ActionCrud
 
       # Paginate records
       def paginate(records)
-        records.paginate(page: pagination_params[:page], per_page: pagination_params[:per_page])
+        records.paginate(pagination_params.select { |k, _v| k.in? [:page, :per_page] })
       end
 
       # Pagination metadata
