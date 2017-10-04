@@ -4,12 +4,14 @@ module ActionCrud
 
     included do
       # Class attributes
-      class_attribute :model_name
-      class_attribute :index_scope
-      class_attribute :permitted_parameters
+      class_attribute :model_name,       instance_predicate: false
+      class_attribute :index_scope,      instance_predicate: false
+      class_attribute :permitted_params, instance_predicate: false
 
-      self.model_name  = self.controller_name
-      self.index_scope = :all
+      # Class attributes defaults
+      self.model_name       = self.controller_name
+      self.index_scope      = :all
+      self.permitted_params = []
 
       # Action callbacks
       before_action :set_record, only: [:show, :edit, :update, :destroy]
@@ -17,7 +19,7 @@ module ActionCrud
 
     class_methods do
       # Set permitted parameters
-      def permit_parameters(options={})
+      def permit_params(options={})
         model   = self.model_name.classify.constantize
         default = { only: model.attribute_names, except: [], also: [], array: [], hash: [] }
         options = Hash[default.merge(options).map { |k, v| [k, Array(v).map(&:to_sym)] }]
@@ -27,7 +29,7 @@ module ActionCrud
         permit.map!    { |a| a.in?(options[:array]) ? [a => []] : a }
         permit.map!    { |a| a.in?(options[:hash])  ? [a => {}] : a }
 
-        self.permitted_parameters = permit
+        self.permitted_params = permit
       end
 
       # Set index scope
@@ -39,6 +41,7 @@ module ActionCrud
     # GET /model
     def index
       self.records = model.send self.index_scope
+      self.records = paginate(records) if respond_to? :per_page
 
       respond_to do |format|
         format.html { render :index }
@@ -103,6 +106,7 @@ module ActionCrud
     # DELETE /model/1
     def destroy
       record.destroy
+
       respond_to do |format|
         format.html { redirect_to records_path, notice: "#{model} was successfully destroyed." }
         format.json { head :no_content }
@@ -159,7 +163,7 @@ module ActionCrud
 
       # Only allow a trusted parameter "white list" through.
       def record_params
-        params.require(:"#{singular_name}").permit self.permitted_parameters
+        params.require(:"#{singular_name}").permit self.permitted_params
       end
   end
 end
