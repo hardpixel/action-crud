@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = ActionCrud::VERSION
   spec.authors       = ['Jonian Guveli']
   spec.email         = ['jonian@hardpixel.eu']
-  spec.summary       = %q{Summary}
-  spec.description   = %q{Description.}
-  spec.homepage      = 'https://github.com/hardpixel/active-delegate'
+  spec.summary       = %q{Inherited restful actions}
+  spec.description   = %q{Speed up development by making your controllers inherit all restful actions.}
+  spec.homepage      = 'https://github.com/hardpixel/action-crud'
   spec.license       = 'MIT'
   spec.files         = Dir['{lib/**/*,[A-Z]*}']
   spec.bindir        = 'exe'
