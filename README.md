@@ -77,12 +77,12 @@ After setting up the controller, like the examples above, you will have a fully 
 
 ActionCrud also injects in your views and controllers the following helpers:
 
-| Paths              | URLs             | Data              |
-| :----------------- | :--------------- | :---------------- |
-| `records_path`     | `records_url`    | `current_model`   |
-| `record_path`      | `record_url`     | `current_record`  |
-| `new_record_path`  | `new_record_url` | `current_records` |
-| `edit_record_path` | `edit_record_url`| &nbsp;            |
+| Paths              | URLs             | Data               | Tags (view only)  |
+| :----------------- | :--------------- | :----------------- | :---------------- |
+| `records_path`     | `records_url`    | `current_model`    | `record_link_to`  |
+| `record_path`      | `record_url`     | `current_record`   | `record_links_to` |
+| `new_record_path`  | `new_record_url` | `current_records`  | &nbsp;            |
+| `edit_record_path` | `edit_record_url`| `permitted_params` | &nbsp;            |
 
 ## Development
 
