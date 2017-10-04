@@ -5,10 +5,11 @@ module ActionCrud
     included do
       # Class attributes
       class_attribute :model_name
-      class_attribute :model_index_scope
+      class_attribute :index_scope
       class_attribute :permitted_parameters
 
-      self.model_name = self.controller_name
+      self.model_name  = self.controller_name
+      self.index_scope = :all
 
       # Action callbacks
       before_action :set_record, only: [:show, :edit, :update, :destroy]
@@ -16,38 +17,28 @@ module ActionCrud
 
     class_methods do
       # Set permitted parameters
-      def permit_parameters(*args)
-        model     = self.model_name.classify.constantize
-        options   = args.extract_options!
-        default   = args.any? ? args : model.attribute_names
-        excluded  = [:id, :created_at, :updated_at]
-        only      = options.fetch(:only, default)
-        also      = options.fetch(:also, [])
-        array     = options.fetch(:array, [])
-        hash      = options.fetch(:hash, [])
-        except    = options.fetch(:except, []).concat(excluded)
-        permitted = only.reject { |a| a.in? except }.concat(also).concat(array).concat(hash)
-        permitted = permitted.uniq.map { |e| e.in?(array) ? [e => []] : e }
-        permitted = permitted.uniq.map { |e| e.in?(hash) ? [e => {}] : e }
+      def permit_parameters(options={})
+        model   = self.model_name.classify.constantize
+        default = { only: model.attribute_names, except: [], also: [], array: [], hash: [] }
+        options = Hash[default.merge(options).map { |k, v| [k, Array(v).map(&:to_sym)] }]
+        permit  = options.except(:except).values.flatten.uniq
 
-        self.permitted_parameters = permitted
+        permit.reject! { |a| a.blank? || a.in?(options[:except] + [:id]) }
+        permit.map!    { |a| a.in?(options[:array]) ? [a => []] : a }
+        permit.map!    { |a| a.in?(options[:hash])  ? [a => {}] : a }
+
+        self.permitted_parameters = permit
       end
 
       # Set index scope
-      def index_scope(scope_name)
-        self.model_index_scope = scope_name
+      def set_index_scope(scope)
+        self.index_scope = scope
       end
     end
 
     # GET /model
     def index
-      if self.model_index_scope
-        collection = model.send self.model_index_scope
-      else
-        collection = model.all
-      end
-
-      self.records = collection
+      self.records = model.send self.index_scope
 
       respond_to do |format|
         format.html { render :index }
@@ -113,7 +104,7 @@ module ActionCrud
     def destroy
       record.destroy
       respond_to do |format|
-        format.html { redirect_to index_record_path, notice: "#{model} was successfully destroyed." }
+        format.html { redirect_to records_path, notice: "#{model} was successfully destroyed." }
         format.json { head :no_content }
       end
     end
