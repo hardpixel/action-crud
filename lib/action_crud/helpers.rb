@@ -1,4 +1,4 @@
-require 'action_crud/helpers/url'
+require 'action_crud/helpers/route'
 require 'action_crud/helpers/link'
 require 'action_crud/helpers/view'
 
@@ -9,7 +9,7 @@ module ActionCrud
       options = args.extract_options!
       record  = args.first
 
-      ActionCrud::Helpers::Url.new(self, record, :show, options).path
+      ActionCrud::Helpers::Route.new(self, record, :show, options).path
     end
 
     # Get record absolute url
@@ -17,7 +17,7 @@ module ActionCrud
       options = args.extract_options!
       record  = args.first
 
-      ActionCrud::Helpers::Url.new(self, record, :show, options).url
+      ActionCrud::Helpers::Route.new(self, record, :show, options).url
     end
 
     # Get records index path
@@ -25,7 +25,7 @@ module ActionCrud
       options = args.extract_options!
       record  = args.first
 
-      ActionCrud::Helpers::Url.new(self, record, :index, options).path
+      ActionCrud::Helpers::Route.new(self, record, :index, options).path
     end
 
     # Get records index absolute url
@@ -33,7 +33,7 @@ module ActionCrud
       options = args.extract_options!
       record  = args.first
 
-      ActionCrud::Helpers::Url.new(self, record, :index, options).url
+      ActionCrud::Helpers::Route.new(self, record, :index, options).url
     end
 
     # Get record new path
@@ -41,7 +41,7 @@ module ActionCrud
       options = args.extract_options!
       record  = args.first
 
-      ActionCrud::Helpers::Url.new(self, record, :new, options).path
+      ActionCrud::Helpers::Route.new(self, record, :new, options).path
     end
 
     # Get record new absolute url
@@ -49,7 +49,7 @@ module ActionCrud
       options = args.extract_options!
       record  = args.first
 
-      ActionCrud::Helpers::Url.new(self, record, :new, options).url
+      ActionCrud::Helpers::Route.new(self, record, :new, options).url
     end
 
     # Get record edit path
@@ -57,7 +57,7 @@ module ActionCrud
       options = args.extract_options!
       record  = args.first
 
-      ActionCrud::Helpers::Url.new(self, record, :edit, options).path
+      ActionCrud::Helpers::Route.new(self, record, :edit, options).path
     end
 
     # Get record edit absolute url
@@ -65,7 +65,7 @@ module ActionCrud
       options = args.extract_options!
       record  = args.first
 
-      ActionCrud::Helpers::Url.new(self, record, :edit, options).url
+      ActionCrud::Helpers::Route.new(self, record, :edit, options).url
     end
   end
 end

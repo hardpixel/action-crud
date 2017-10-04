@@ -1,6 +1,6 @@
 module ActionCrud
   module Helpers
-    class Url
+    class Route
       attr_accessor :record, :action, :options, :path, :url
 
       # Intialize url finder

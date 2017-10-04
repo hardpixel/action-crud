@@ -29,7 +29,7 @@ module ActionCrud
 
       # Get record path
       def record_path
-        ActionCrud::Helpers::Url.new(@context, record, action).path || "#{action}"
+        ActionCrud::Helpers::Route.new(@context, record, action).path || "#{action}"
       end
 
       # Render multiple
