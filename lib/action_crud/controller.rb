@@ -32,6 +32,11 @@ module ActionCrud
         self.permitted_params = permit
       end
 
+      # Set model name
+      def set_model_name(name)
+        self.model_name = name
+      end
+
       # Set index scope
       def set_index_scope(scope)
         self.index_scope = scope
