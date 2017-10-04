@@ -3,8 +3,21 @@ module ActionCrud
     extend ActiveSupport::Concern
 
     included do
+      # Class attributes
+      class_attribute :per_page, instance_predicate: false
+
+      # Class attributes defaults
+      self.per_page = 20
+
       # Action callbacks
       before_action :set_pagination_params, only: [:index]
+    end
+
+    class_methods do
+      # Set per page limit
+      def set_per_page(limit)
+        self.per_page = limit.to_i
+      end
     end
 
     private
@@ -21,14 +34,14 @@ module ActionCrud
 
       # Get pagination per page
       def per_page
-        pagination_params[:per_page]
+        pagination_params[:per_page] || super
       end
 
       # Set pagination parameters
       def set_pagination_params
         pagination                   = pagination_params[:page].is_a?(Hash) ? pagination_params[:page] : {}
         pagination_params[:page]     = pagination[:number] || pagination_params.fetch(:page, 1)
-        pagination_params[:per_page] = pagination[:size]   || pagination_params.fetch(:per_page, 20)
+        pagination_params[:per_page] = pagination[:size]   || pagination_params.fetch(:per_page, per_page)
       end
 
       # Paginate records
