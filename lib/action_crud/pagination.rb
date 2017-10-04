@@ -36,7 +36,11 @@ module ActionCrud
 
       # Paginate records
       def paginate(records)
-        records.paginate(pagination_params.select { |k, _v| k.in? [:page, :per_page] })
+        if records.respond_to? :paginate
+          records.paginate(pagination_params.select { |k, _v| k.in? [:page, :per_page] })
+        else
+          records
+        end
       end
 
       # Pagination metadata
