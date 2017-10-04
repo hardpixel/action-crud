@@ -67,24 +67,5 @@ module ActionCrud
 
       ActionCrud::Helpers::Url.new(self, record, :edit, options).url
     end
-
-    # Get record link
-    def record_link_to(record=nil, *args)
-      options = args.extract_options!
-      action  = args.first
-
-      ActionCrud::Helpers::Link.new(self, record, action, options).render
-    end
-
-    # Get record links
-    def record_links_to(record=nil, *args)
-      options = args.extract_options!
-      default = options.fetch :html, {}
-      options = options.except(:html)
-      actions = args.concat(options.keys)
-      actions = actions.any? ? actions : [:show, :edit, :destroy]
-
-      ActionCrud::Helpers::Link.new(self, record, actions, default).render_multiple(options)
-    end
   end
 end
