@@ -1,6 +1,6 @@
 module ActionCrud
   module Helpers
-    module Views
+    module View
       # Get current model
       def current_model
         controller.try(:current_model)

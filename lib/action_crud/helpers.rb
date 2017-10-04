@@ -1,6 +1,6 @@
 require 'action_crud/helpers/url'
 require 'action_crud/helpers/link'
-require 'action_crud/helpers/views'
+require 'action_crud/helpers/view'
 
 module ActionCrud
   module Helpers
