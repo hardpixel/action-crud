@@ -4,7 +4,7 @@ ActionCrud speeds up development by making your controllers inherit all restful 
 
 [![Gem Version](https://badge.fury.io/rb/action_crud.svg)](https://badge.fury.io/rb/action_crud)
 [![Build Status](https://travis-ci.org/hardpixel/action-crud.svg?branch=master)](https://travis-ci.org/hardpixel/action-crud)
-[![Code Climate](https://codeclimate.com/github/hardpixel/action-crud/badges/gpa.png)](https://codeclimate.com/github/hardpixel/aaction-crud)
+[![Code Climate](https://codeclimate.com/github/hardpixel/action-crud/badges/gpa.png)](https://codeclimate.com/github/hardpixel/action-crud)
 
 ## Installation
 
