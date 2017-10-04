@@ -75,7 +75,7 @@ class Post < ActionController::Base
 end
 ```
 
-After setting up the controller, like the examples above, you will have a fully working CRUD controller with instance variables `@post` and `@posts` available. Also, if you use a pagination gem like (SmartPagination)[https://github.com/hardpixel/smart-pagination], the index records will be automagically paginated!
+After setting up the controller, like the examples above, you will have a fully working CRUD controller with instance variables `@post` and `@posts` available. Also, if you use a pagination gem like [SmartPagination](https://github.com/hardpixel/smart-pagination), the index records will be automagically paginated!
 
 ActionCrud also injects in your views and controllers the following helpers:
 
