@@ -1,3 +1,4 @@
+require 'activesupport'
 require 'action_crud/controller'
 require 'action_crud/pagination'
 require 'action_crud/helpers/route'
