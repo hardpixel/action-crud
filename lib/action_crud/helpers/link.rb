@@ -7,7 +7,7 @@ module ActionCrud
       def initialize(context, record=nil, action=nil, *args)
         @options = args.extract_options!
         @context = context
-        @record  = record || @context.try(:current_record) || @context.try(:record)
+        @record  = record || @context.try(:current_record)
         @action  = action
         @label   = options.fetch :label, nil
         @options = options.except :label

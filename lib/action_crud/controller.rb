@@ -114,15 +114,21 @@ module ActionCrud
       model_name.classify.constantize
     end
 
+    alias :current_model :model
+
     # Get single record
     def record
       instance_variable_get "@#{singular_name}"
     end
 
+    alias :current_record :record
+
     # Get records collection
     def records
       instance_variable_get "@#{plural_name}"
     end
+
+    alias :current_records :records
 
     private
 

@@ -3,17 +3,17 @@ module ActionCrud
     module Views
       # Get current model
       def current_model
-        controller.try(:model)
+        controller.try(:current_model)
       end
 
       # Get current record
       def current_record
-        controller.try(:record) || current_model.try(:new)
+        controller.try(:current_record) || current_model.try(:new)
       end
 
       # Get current records
       def current_records
-        controller.try(:records) || []
+        controller.try(:current_records) || []
       end
 
       # Get permitted parameters

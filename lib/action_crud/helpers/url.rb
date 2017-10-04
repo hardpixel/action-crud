@@ -6,7 +6,7 @@ module ActionCrud
       # Intialize url finder
       def initialize(context, record=nil, action=nil, *options)
         @context = context
-        @record  = record || @context.try(:current_record) || @context.try(:record)
+        @record  = record || @context.try(:current_record)
         @action  = action
         @options = options
         @path    = route_uri :path
