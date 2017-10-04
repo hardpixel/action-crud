@@ -1,6 +1,6 @@
 module ActionCrud
   module Helpers
-    module Records
+    module Views
       # Get current model
       def current_model
         controller.try(:model)
@@ -14,6 +14,11 @@ module ActionCrud
       # Get current records
       def current_records
         controller.try(:records) || []
+      end
+
+      # Get permitted parameters
+      def permitted_parameters
+        controller.try(:permitted_parameters) || []
       end
     end
   end

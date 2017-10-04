@@ -16,7 +16,7 @@ end
 # Include action view helpers
 if defined? ActionView::Base
   ActionView::Base.send :include, ActionCrud::Helpers
-  ActionView::Base.send :include, ActionCrud::Helpers::Records
+  ActionView::Base.send :include, ActionCrud::Helpers::Views
 end
 
 # Include action controller helpers
