@@ -51,7 +51,7 @@ class Post < ActionController::Base
   # Using the set_index_scope function
   set_index_scope :published
 
-  # Or by setting the model_name class attribute
+  # Or by setting the index_scope class attribute
   self.index_scope = :published
 end
 ```
@@ -75,7 +75,19 @@ class Post < ActionController::Base
 end
 ```
 
-After setting up the controller, like the examples above, you will have a fully working CRUD controller with instance variables `@post` and `@posts` available. Also, if you use a pagination gem like [SmartPagination](https://github.com/hardpixel/smart-pagination), the index records will be automagically paginated!
+If you use a pagination gem like [SmartPagination](https://github.com/hardpixel/smart-pagination), the index records will be automagically paginated. To set the results limit per page (default: 20), use the `set_per_page` function:
+
+```ruby
+class Post < ActionController::Base
+  # Using the set_per_page function
+  set_per_page 10
+
+  # Or by setting the per_page class attribute
+  self.per_page = 10
+end
+```
+
+After setting up the controller, like the examples above, you will have a fully working CRUD controller with instance variables `@post` and `@posts` available.
 
 ActionCrud also injects in your views and controllers the following helpers:
 
