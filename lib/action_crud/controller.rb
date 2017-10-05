@@ -5,11 +5,15 @@ module ActionCrud
     included do
       # Class attributes
       class_attribute :model_name,       instance_predicate: false
+      class_attribute :instance_name,    instance_predicate: false
+      class_attribute :collection_name,  instance_predicate: false
       class_attribute :index_scope,      instance_predicate: false
       class_attribute :permitted_params, instance_predicate: false
 
       # Class attributes defaults
-      self.model_name       = self.controller_name
+      self.model_name       = controller_name
+      self.instance_name    = model_name.demodulize.singularize
+      self.collection_name  = model_name.demodulize.pluralize
       self.index_scope      = :all
       self.permitted_params = []
 
@@ -127,38 +131,28 @@ module ActionCrud
 
     # Get single record
     def record
-      instance_variable_get "@#{singular_name}"
+      instance_variable_get "@#{instance_name}"
     end
 
     alias :current_record :record
 
     # Get records collection
     def records
-      instance_variable_get "@#{plural_name}"
+      instance_variable_get "@#{collection_name}"
     end
 
     alias :current_records :records
 
     private
 
-      # Get singular name
-      def singular_name
-        model_name.demodulize.singularize
-      end
-
-      # Get plural name
-      def plural_name
-        model_name.demodulize.pluralize
-      end
-
       # Set single record
       def record=(value)
-        instance_variable_set "@#{singular_name}", value
+        instance_variable_set "@#{instance_name}", value
       end
 
       # Set records collection
       def records=(value)
-        instance_variable_set "@#{plural_name}", value
+        instance_variable_set "@#{collection_name}", value
       end
 
       # Use callbacks to share common setup or constraints between actions.
@@ -168,7 +162,7 @@ module ActionCrud
 
       # Only allow a trusted parameter "white list" through.
       def record_params
-        params.require(:"#{singular_name}").permit permitted_params
+        params.require(:"#{instance_name}").permit permitted_params
       end
   end
 end
