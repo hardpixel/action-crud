@@ -20,7 +20,7 @@ module ActionCrud
     class_methods do
       # Set permitted parameters
       def permit_params(options={})
-        model   = self.model_name.classify.constantize
+        model   = model_name.classify.constantize
         default = { only: model.attribute_names, except: [], also: [], array: [], hash: [] }
         options = Hash[default.merge(options).map { |k, v| [k, Array(v).map(&:to_sym)] }]
         permit  = options.except(:except).values.flatten.uniq
@@ -45,7 +45,7 @@ module ActionCrud
 
     # GET /model
     def index
-      self.records = model.send self.index_scope
+      self.records = model.send index_scope
       self.records = paginate(records) if respond_to? :per_page
 
       respond_to do |format|
@@ -168,7 +168,7 @@ module ActionCrud
 
       # Only allow a trusted parameter "white list" through.
       def record_params
-        params.require(:"#{singular_name}").permit self.permitted_params
+        params.require(:"#{singular_name}").permit permitted_params
       end
   end
 end
