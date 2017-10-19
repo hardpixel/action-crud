@@ -21,6 +21,7 @@ module ActionCrud
 
       # Action callbacks
       before_action :set_record, only: [:show, :edit, :update, :destroy]
+      before_action :set_permitted_params, if: -> { permitted_params.empty? }
     end
 
     class_methods do
@@ -136,7 +137,7 @@ module ActionCrud
 
     # Get model
     def model
-      model_class
+      record.nil? ? model_class : record.class
     end
 
     alias :current_model :model
@@ -175,6 +176,12 @@ module ActionCrud
       # Only allow a trusted parameter "white list" through.
       def record_params
         params.require(:"#{instance_name}").permit permitted_params
+      end
+
+      # Set permitted params from record/model if not set in controller.
+      def set_permitted_params
+        source = record || model
+        self.permitted_params = Array(source.try :permitted_attributes)
       end
   end
 end
