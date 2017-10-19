@@ -81,7 +81,7 @@ class Post < ActionController::Base
 end
 ```
 
-Permitted parameters can be set also in your models or records, if you want to apply some logic. The parameters are loaded with priority `controller`, `record`, `model`.
+Permitted parameters can also be set in your models or records, if you want to apply some logic, by adding a `permitted_attributes` function. The parameters are loaded with priority `controller` then `record` then `model`, like the example below:
 
 ```ruby
 class Post < ActiveRecord::Base
