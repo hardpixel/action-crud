@@ -39,13 +39,17 @@ module ActionCrud
 
       # Set model name
       def set_model_name(name=nil)
-        self.model_name      = (name || controller_name.classify).constantize.model_name
+        name = name || controller_name.classify
+        name = name.constantize if name.is_a? String
+
+        self.model_name      = name.model_name
         self.instance_name   = model_name.singular
         self.collection_name = model_name.plural
       end
 
       # Set model class
       def set_model_class(klass=nil)
+        klass = klass.constantize if klass.is_a? String
         self.model_class = klass || model_name.instance_variable_get('@klass')
       end
 
