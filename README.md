@@ -32,7 +32,7 @@ class Post < ActionController::Base
 end
 ```
 
-To set the controller model, use the `set_model_name` function:
+To set the controller model and class, use the `set_model_name` and `set_model_class` functions:
 
 ```ruby
 class Post < ActionController::Base
@@ -41,6 +41,12 @@ class Post < ActionController::Base
 
   # Or by setting the model_name class attribute
   self.model_name = 'Post'
+
+  # Using the set_model_class function
+  set_model_class 'Post'
+
+  # Or by setting the model_class class attribute
+  self.model_class = 'Post'
 end
 ```
 
