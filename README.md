@@ -81,6 +81,24 @@ class Post < ActionController::Base
 end
 ```
 
+Permitted parameters can be set also in your models or records, if you want to apply some logic. The parameters are loaded with priority `controller`, `record`, `model`.
+
+```ruby
+class Post < ActiveRecord::Base
+  # Set permitted_attributes in model
+  def self.permitted_attributes
+    [:title, :content, :comments]
+  end
+
+  # Set permitted_attributes in record
+  def permitted_attributes
+    if new_record?
+      [:title, :content]
+    end
+  end
+end
+```
+
 If you use a pagination gem like [SmartPagination](https://github.com/hardpixel/smart-pagination), the index records will be automagically paginated. To set the results limit per page (default: 20), use the `set_per_page` function:
 
 ```ruby
