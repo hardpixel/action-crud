@@ -180,8 +180,10 @@ module ActionCrud
 
       # Set permitted params from record/model if not set in controller.
       def set_permitted_params
-        source = record || model
-        self.permitted_params = Array(source.try :permitted_attributes)
+        att_method = :permitted_attributes
+        attributes = record.try(att_method) || model.try(att_method)
+
+        self.permitted_params = Array(attributes)
       end
   end
 end
