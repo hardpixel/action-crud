@@ -5,17 +5,19 @@ module ActionCrud
     included do
       # Class attributes
       class_attribute :model_name,       instance_predicate: false
+      class_attribute :model_class,      instance_predicate: false
       class_attribute :instance_name,    instance_predicate: false
       class_attribute :collection_name,  instance_predicate: false
       class_attribute :index_scope,      instance_predicate: false
       class_attribute :permitted_params, instance_predicate: false
 
       # Class attributes defaults
-      self.model_name       = controller_name
-      self.instance_name    = model_name.demodulize.singularize
-      self.collection_name  = model_name.demodulize.pluralize
-      self.index_scope      = :all
       self.permitted_params = []
+
+      # Set class attributes
+      set_model_name
+      set_model_class
+      set_index_scope
 
       # Action callbacks
       before_action :set_record, only: [:show, :edit, :update, :destroy]
@@ -24,8 +26,7 @@ module ActionCrud
     class_methods do
       # Set permitted parameters
       def permit_params(options={})
-        model   = model_name.classify.constantize
-        default = { only: model.attribute_names, except: [], also: [], array: [], hash: [] }
+        default = { only: model_class.attribute_names, except: [], also: [], array: [], hash: [] }
         options = Hash[default.merge(options).map { |k, v| [k, Array(v).map(&:to_sym)] }]
         permit  = options.except(:except).values.flatten.uniq
 
@@ -37,13 +38,20 @@ module ActionCrud
       end
 
       # Set model name
-      def set_model_name(name)
-        self.model_name = name
+      def set_model_name(name=nil)
+        self.model_name      = (name || controller_name.classify).constantize.model_name
+        self.instance_name   = model_name.singular
+        self.collection_name = model_name.plural
+      end
+
+      # Set model class
+      def set_model_class(klass=nil)
+        self.model_class = klass || model_name.instance_variable_get('@klass')
       end
 
       # Set index scope
-      def set_index_scope(scope)
-        self.index_scope = scope
+      def set_index_scope(scope='all')
+        self.index_scope = scope.to_sym
       end
     end
 
@@ -124,7 +132,7 @@ module ActionCrud
 
     # Get model
     def model
-      model_name.classify.constantize
+      model_class
     end
 
     alias :current_model :model
