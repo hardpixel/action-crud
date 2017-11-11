@@ -16,7 +16,6 @@ module ActionCrud
 
       # Set class attributes
       set_model_name
-      set_model_class
       set_index_scope
 
       # Action callbacks
@@ -27,7 +26,8 @@ module ActionCrud
     class_methods do
       # Set permitted parameters
       def permit_params(options={})
-        default = { only: model_class.attribute_names, except: [], also: [], array: [], hash: [] }
+        attribs = model_class.try(:attribute_names).to_a
+        default = { only: attribs, except: [], also: [], array: [], hash: [] }
         options = Hash[default.merge(options).map { |k, v| [k, Array(v).map(&:to_sym)] }]
         permit  = options.except(:except).values.flatten.uniq
 
@@ -40,12 +40,16 @@ module ActionCrud
 
       # Set model name
       def set_model_name(name=nil)
-        name = name || controller_name.classify
+        name = name || _guess_controller_model
         name = name.constantize if name.is_a? String
 
-        self.model_name      = name.model_name
-        self.instance_name   = model_name.singular
-        self.collection_name = model_name.plural
+        unless name.nil?
+          self.model_name      = name.model_name
+          self.instance_name   = model_name.singular
+          self.collection_name = model_name.plural
+
+          set_model_class
+        end
       end
 
       # Set model class
@@ -58,6 +62,13 @@ module ActionCrud
       def set_index_scope(scope='all')
         self.index_scope = scope.to_sym
       end
+
+      private
+
+        def _guess_controller_model
+          controller_name.classify.safe_constantize ||
+          name.sub(/controller/i, '').classify.safe_constantize
+        end
     end
 
     # GET /model
