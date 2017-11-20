@@ -4,6 +4,7 @@ module ActionCrud
 
     included do
       # Class attributes
+      class_attribute :namespace,        instance_predicate: false
       class_attribute :model_name,       instance_predicate: false
       class_attribute :model_class,      instance_predicate: false
       class_attribute :instance_name,    instance_predicate: false
@@ -38,6 +39,11 @@ module ActionCrud
         self.permitted_params = permit
       end
 
+      # Set namespace to remove from model
+      def set_namespace(name=nil)
+        self.namespace = name
+      end
+
       # Set model name
       def set_model_name(name=nil)
         name = name || _guess_controller_model
@@ -66,8 +72,12 @@ module ActionCrud
       private
 
         def _guess_controller_model
-          controller_name.classify.safe_constantize ||
-          name.sub(/controller/i, '').classify.safe_constantize
+          if namespace.nil?
+            controller_name.classify.safe_constantize ||
+            name.gsub(/controller$/i, '').classify.safe_constantize
+          else
+            name.gsub(/^#{namespace.to_s}|controller$/i, '').classify.safe_constantize
+          end
         end
     end
 

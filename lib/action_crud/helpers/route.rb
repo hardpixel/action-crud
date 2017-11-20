@@ -1,16 +1,16 @@
 module ActionCrud
   module Helpers
     class Route
-      attr_accessor :record, :action, :options, :path, :url
+      attr_accessor :model, :record, :action, :options, :path, :url
 
       # Intialize url finder
       def initialize(context, record=nil, action=nil, *options)
         @context = context
         @record  = record || @context.try(:current_record)
         @action  = action
-        @options = options
-        @path    = route_uri :path
-        @url     = route_uri :url
+        @options = Hash(options.first)
+        @path    = route_uri true
+        @url     = route_uri false
       end
 
       # To string
@@ -18,14 +18,9 @@ module ActionCrud
         instance_variable_get("@#{type}").to_s
       end
 
-      # Is index action
-      def index?
-        action == :index
-      end
-
-      # Should prefix method
-      def prefix?
-        action.in? [:new, :edit]
+      # Check if inside engine
+      def engine?
+        @context.respond_to? :main_app
       end
 
       # Should include record
@@ -33,20 +28,46 @@ module ActionCrud
         action.in? [:show, :edit, :delete, :destroy]
       end
 
-      # Find route key
-      def route_key
-        singular = 'singular_' unless index?
-        record.model_name.try :"#{singular}route_key"
+      # Get model name
+      def model(method='singular')
+        unless @record.nil?
+          @record.class.model_name.send(method).to_sym
+        end
+      end
+
+      # Get route namespace
+      def namespace
+        if @context.respond_to? :controller
+          @context.controller.try(:namespace)
+        else
+          @context.try(:namespace)
+        end
+      end
+
+      # Get namespaced record
+      def namespaced_record
+        if action == :edit
+          namespace.present? ? [:edit, namespace, record] : [:edit, record]
+        else
+          namespace.present? ? [namespace, record] : [record]
+        end
+      end
+
+      # Get namespaced model
+      def namespaced_model
+        if action == :new
+          namespace.present? ? [:new, namespace, model] : [:new, model]
+        else
+          namespace.present? ? [namespace, model('plural')] : model('plural')
+        end
       end
 
       # Find route method
-      def route_uri(type)
-        args   = [*options]
-        args   = [record, *options] if record?
-        method = "#{route_key}_#{type}"
-        method = "#{action}_#{method}" if prefix?
+      def route_uri(only_path=false)
+        args = record? ? namespaced_record : namespaced_model
+        args = [args, options.merge(only_path: only_path)].flatten.reject(&:blank?)
 
-        @context.try :"#{method}", *args
+        engine? ? @context.main_app.url_for(args) : @context.url_for(args)
       end
     end
   end
