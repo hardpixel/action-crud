@@ -39,6 +39,8 @@ module ActionCrud
         actions = args.concat(action).concat(options.keys)
         links   = actions.uniq.map do |item|
           args = Hash(options[item]).reverse_merge(default)
+          args = args.merge(class: "#{default[:class]} #{args[:class]}".strip)
+
           ActionCrud::Helpers::Link.new(@context, record, item, args).render
         end
 
