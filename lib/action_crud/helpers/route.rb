@@ -18,11 +18,6 @@ module ActionCrud
         instance_variable_get("@#{type}").to_s
       end
 
-      # Check if inside engine
-      def engine?
-        @context.respond_to? :main_app
-      end
-
       # Should include record
       def record?
         action.in? [:show, :edit, :delete, :destroy]
@@ -67,7 +62,7 @@ module ActionCrud
         args = record? ? namespaced_record : namespaced_model
         args = [args, options.merge(only_path: only_path)].flatten.reject(&:blank?)
 
-        engine? ? @context.main_app.url_for(args) : @context.url_for(args)
+        @context.url_for(args)
       end
     end
   end
