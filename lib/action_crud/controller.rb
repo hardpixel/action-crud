@@ -42,6 +42,7 @@ module ActionCrud
       # Set namespace to remove from model
       def set_namespace(name=nil)
         self.namespace = name
+        set_model_name
       end
 
       # Set model name
