@@ -85,6 +85,7 @@ module ActionCrud
     # GET /model
     def index
       self.records = model.send index_scope
+      self.records =  model.send(:search, params[:search]) if should_search?
       self.records = paginate(records) if respond_to? :per_page
 
       respond_to do |format|
@@ -206,6 +207,11 @@ module ActionCrud
         attributes = record.try(att_method) || model.try(att_method)
 
         self.permitted_params = Array(attributes)
+      end
+
+      # Check if model responds to search
+      def should_search?
+       params[:search].present? and model.respond_to? :search
       end
   end
 end
