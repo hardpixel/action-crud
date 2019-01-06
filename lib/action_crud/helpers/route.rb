@@ -25,9 +25,7 @@ module ActionCrud
 
       # Get model name
       def model(method='singular')
-        unless @record.nil?
-          @record.class.model_name.send(method).to_sym
-        end
+        @record.class.model_name.send(method).to_sym unless @record.nil?
       end
 
       # Get route namespace

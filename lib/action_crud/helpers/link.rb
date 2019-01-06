@@ -12,9 +12,7 @@ module ActionCrud
         @label   = options.fetch :label, nil
         @options = options.except :label
 
-        if delete?
-          @options.reverse_merge!(method: :delete, data: { confirm: 'Are you sure?' })
-        end
+        @options.reverse_merge!(method: :delete, data: { confirm: 'Are you sure?' }) if delete?
       end
 
       # Is delete action
