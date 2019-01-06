@@ -3,7 +3,6 @@ module ActionCrud
     class Route
       attr_accessor :model, :record, :action, :options, :path, :url
 
-      # Intialize url finder
       def initialize(context, record = nil, action = nil, *options)
         @context = context
         @record  = record || @context.try(:current_record)
@@ -13,22 +12,18 @@ module ActionCrud
         @url     = route_uri false
       end
 
-      # To string
       def to_s(type = :path)
         instance_variable_get("@#{type}").to_s
       end
 
-      # Should include record
       def record?
         action.in? [:show, :edit, :delete, :destroy]
       end
 
-      # Get model name
       def model(method = 'singular')
         @record.class.model_name.send(method).to_sym unless @record.nil?
       end
 
-      # Get route namespace
       def namespace
         if @context.respond_to? :controller
           @context.controller.try(:namespace)
@@ -37,7 +32,6 @@ module ActionCrud
         end
       end
 
-      # Get namespaced record
       def namespaced_record
         if action == :edit
           namespace.present? ? [:edit, namespace, record] : [:edit, record]
@@ -46,7 +40,6 @@ module ActionCrud
         end
       end
 
-      # Get namespaced model
       def namespaced_model
         if action == :new
           namespace.present? ? [:new, namespace, model] : [:new, model]
@@ -55,7 +48,6 @@ module ActionCrud
         end
       end
 
-      # Find route method
       def route_uri(only_path = false)
         args = record? ? namespaced_record : namespaced_model
         args = [args, options.merge(only_path: only_path)].flatten.reject(&:blank?)

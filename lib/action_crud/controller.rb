@@ -3,7 +3,6 @@ module ActionCrud
     extend ActiveSupport::Concern
 
     included do
-      # Class attributes
       class_attribute :namespace,        instance_predicate: false
       class_attribute :model_name,       instance_predicate: false
       class_attribute :model_class,      instance_predicate: false
@@ -12,20 +11,16 @@ module ActionCrud
       class_attribute :index_scope,      instance_predicate: false
       class_attribute :permitted_params, instance_predicate: false
 
-      # Class attributes defaults
       self.permitted_params = []
 
-      # Set class attributes
       set_model_name
       set_index_scope
 
-      # Action callbacks
       before_action :set_record, only: [:show, :edit, :update, :destroy]
       before_action :set_permitted_params, if: -> { permitted_params.empty? }
     end
 
     class_methods do
-      # Set permitted parameters
       def permit_params(options = {})
         attribs = model_class.try(:attribute_names).to_a
         default = { only: attribs, except: [], also: [], array: [], hash: [] }
@@ -39,13 +34,11 @@ module ActionCrud
         self.permitted_params = permit
       end
 
-      # Set namespace to remove from model
       def set_namespace(name = nil)
         self.namespace = name
         set_model_name
       end
 
-      # Set model name
       def set_model_name(name = nil)
         name = name || _guess_controller_model
         name = name.constantize if name.is_a? String
@@ -59,13 +52,11 @@ module ActionCrud
         end
       end
 
-      # Set model class
       def set_model_class(klass = nil)
         klass = klass.constantize if klass.is_a? String
         self.model_class = klass || model_name.instance_variable_get('@klass')
       end
 
-      # Set index scope
       def set_index_scope(scope = 'all')
         self.index_scope = scope.to_sym
       end
@@ -158,21 +149,18 @@ module ActionCrud
       end
     end
 
-    # Get model
     def model
       record.nil? ? model_class : record.class
     end
 
     alias :current_model :model
 
-    # Get single record
     def record
       instance_variable_get "@#{instance_name}"
     end
 
     alias :current_record :record
 
-    # Get records collection
     def records
       instance_variable_get "@#{collection_name}"
     end
@@ -181,27 +169,22 @@ module ActionCrud
 
     private
 
-    # Set single record
     def record=(value)
       instance_variable_set "@#{instance_name}", value
     end
 
-    # Set records collection
     def records=(value)
       instance_variable_set "@#{collection_name}", value
     end
 
-    # Use callbacks to share common setup or constraints between actions.
     def set_record
       self.record = model.find(params[:id])
     end
 
-    # Only allow a trusted parameter "white list" through.
     def record_params
       params.require(:"#{instance_name}").permit permitted_params
     end
 
-    # Set permitted params from record/model if not set in controller.
     def set_permitted_params
       att_method = :permitted_attributes
       attributes = record.try(att_method) || model.try(att_method)
@@ -209,7 +192,6 @@ module ActionCrud
       self.permitted_params = Array(attributes)
     end
 
-    # Check if model responds to search
     def should_search?
       params[:search].present? && model.respond_to?(:search)
     end
