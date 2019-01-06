@@ -72,14 +72,14 @@ module ActionCrud
 
       private
 
-        def _guess_controller_model
-          if namespace.nil?
-            controller_name.classify.safe_constantize ||
-            name.gsub(/controller$/i, '').classify.safe_constantize
-          else
-            name.gsub(/^#{namespace.to_s}|controller$/i, '').classify.safe_constantize
-          end
+      def _guess_controller_model
+        if namespace.nil?
+          controller_name.classify.safe_constantize ||
+          name.gsub(/controller$/i, '').classify.safe_constantize
+        else
+          name.gsub(/^#{namespace.to_s}|controller$/i, '').classify.safe_constantize
         end
+      end
     end
 
     # GET /model
@@ -181,37 +181,37 @@ module ActionCrud
 
     private
 
-      # Set single record
-      def record=(value)
-        instance_variable_set "@#{instance_name}", value
-      end
+    # Set single record
+    def record=(value)
+      instance_variable_set "@#{instance_name}", value
+    end
 
-      # Set records collection
-      def records=(value)
-        instance_variable_set "@#{collection_name}", value
-      end
+    # Set records collection
+    def records=(value)
+      instance_variable_set "@#{collection_name}", value
+    end
 
-      # Use callbacks to share common setup or constraints between actions.
-      def set_record
-        self.record = model.find(params[:id])
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_record
+      self.record = model.find(params[:id])
+    end
 
-      # Only allow a trusted parameter "white list" through.
-      def record_params
-        params.require(:"#{instance_name}").permit permitted_params
-      end
+    # Only allow a trusted parameter "white list" through.
+    def record_params
+      params.require(:"#{instance_name}").permit permitted_params
+    end
 
-      # Set permitted params from record/model if not set in controller.
-      def set_permitted_params
-        att_method = :permitted_attributes
-        attributes = record.try(att_method) || model.try(att_method)
+    # Set permitted params from record/model if not set in controller.
+    def set_permitted_params
+      att_method = :permitted_attributes
+      attributes = record.try(att_method) || model.try(att_method)
 
-        self.permitted_params = Array(attributes)
-      end
+      self.permitted_params = Array(attributes)
+    end
 
-      # Check if model responds to search
-      def should_search?
-       params[:search].present? and model.respond_to? :search
-      end
+    # Check if model responds to search
+    def should_search?
+      params[:search].present? and model.respond_to? :search
+    end
   end
 end
