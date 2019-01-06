@@ -4,7 +4,7 @@ module ActionCrud
       attr_accessor :record, :action, :label, :options
 
       # Initialize link generator
-      def initialize(context, record=nil, action=nil, *args)
+      def initialize(context, record = nil, action = nil, *args)
         @options = args.extract_options!
         @context = context
         @record  = record || @context.try(:current_record)

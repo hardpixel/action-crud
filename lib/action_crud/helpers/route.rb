@@ -4,7 +4,7 @@ module ActionCrud
       attr_accessor :model, :record, :action, :options, :path, :url
 
       # Intialize url finder
-      def initialize(context, record=nil, action=nil, *options)
+      def initialize(context, record = nil, action = nil, *options)
         @context = context
         @record  = record || @context.try(:current_record)
         @action  = action
@@ -14,7 +14,7 @@ module ActionCrud
       end
 
       # To string
-      def to_s(type=:path)
+      def to_s(type = :path)
         instance_variable_get("@#{type}").to_s
       end
 
@@ -24,7 +24,7 @@ module ActionCrud
       end
 
       # Get model name
-      def model(method='singular')
+      def model(method = 'singular')
         @record.class.model_name.send(method).to_sym unless @record.nil?
       end
 
@@ -56,7 +56,7 @@ module ActionCrud
       end
 
       # Find route method
-      def route_uri(only_path=false)
+      def route_uri(only_path = false)
         args = record? ? namespaced_record : namespaced_model
         args = [args, options.merge(only_path: only_path)].flatten.reject(&:blank?)
 

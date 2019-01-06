@@ -26,7 +26,7 @@ module ActionCrud
 
     class_methods do
       # Set permitted parameters
-      def permit_params(options={})
+      def permit_params(options = {})
         attribs = model_class.try(:attribute_names).to_a
         default = { only: attribs, except: [], also: [], array: [], hash: [] }
         options = Hash[default.merge(options).map { |k, v| [k, Array(v).map(&:to_sym)] }]
@@ -40,13 +40,13 @@ module ActionCrud
       end
 
       # Set namespace to remove from model
-      def set_namespace(name=nil)
+      def set_namespace(name = nil)
         self.namespace = name
         set_model_name
       end
 
       # Set model name
-      def set_model_name(name=nil)
+      def set_model_name(name = nil)
         name = name || _guess_controller_model
         name = name.constantize if name.is_a? String
 
@@ -60,13 +60,13 @@ module ActionCrud
       end
 
       # Set model class
-      def set_model_class(klass=nil)
+      def set_model_class(klass = nil)
         klass = klass.constantize if klass.is_a? String
         self.model_class = klass || model_name.instance_variable_get('@klass')
       end
 
       # Set index scope
-      def set_index_scope(scope='all')
+      def set_index_scope(scope = 'all')
         self.index_scope = scope.to_sym
       end
 
