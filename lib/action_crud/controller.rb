@@ -211,7 +211,7 @@ module ActionCrud
 
     # Check if model responds to search
     def should_search?
-      params[:search].present? and model.respond_to? :search
+      params[:search].present? && model.respond_to?(:search)
     end
   end
 end
